@@ -25,5 +25,14 @@
     "postcss": "^8.4.31",
     "process": "^0.11.10",
     "tailwindcss": "^3.3.5"
+  },
+  "proxy": {
+    "/api": {
+      "target": "https://www.swiggy.com",
+      "changeOrigin": true,
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
   }
 }
