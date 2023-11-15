@@ -1,12 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
 import logo from '../assets/logo.png';
-import { FcSearch } from 'react-icons/fc';
-import { restaurantList } from '../config';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-
-
 
 
   return (
@@ -17,25 +13,17 @@ const Navbar = () => {
         <ul className='flex gap-8 space-x-4 text-lg font-semibold'>
       
           <li>
-            <a href='#' className='text-slate-800 hover:text-orange-500 transition duration-300'>
-              Home
-            </a>
+            <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/'>Home</Link>
           </li>
           <li>
-            <a href='#' className='text-slate-800 hover:text-orange-500 transition duration-300'>
-              About
-            </a>
+          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/about'>About</Link>
           </li>
           <li>
-            <a href='#' className='text-slate-800 hover:text-orange-500 transition duration-300'>
-              Contact
-            </a>
+          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/contact'>Contact</Link>
           </li>
 
           <li>
-            <a href='#' className='text-slate-800 hover:text-orange-500 transition duration-300'>
-              Cart
-            </a>
+          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/cart'>Cart</Link>
           </li>
         </ul>
       </div>
