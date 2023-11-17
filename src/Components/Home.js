@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import RestaurantCard from '../Utils/RestaurantCard';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
+import { filterData } from '../Utils/Helper';
+import { useOnline } from '../Utils/useOnline';
+import offline_img from "../assets/offline.png";
 
 const Home = () => {
   const [searchText, setSearchText] = useState('');
@@ -39,12 +42,25 @@ const Home = () => {
     }
   };
 
-  const filterData = (searchText, restaurants) => {
-    return restaurants.filter((restaurant) =>
-      restaurant.info.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
+  const isOnline = useOnline();
 
+  if (!isOnline) {
+    return (
+      <>
+      <div className='m-20'>
+        <h1 className='text-xl font-bold flex justify-center '>
+          🔴 Offline, please check your internet connection!
+        </h1>
+        <img
+          className='w-80 h-80 object-cover rounded-full shadow-md mx-auto'
+          src={offline_img}
+          alt='Error'
+        />
+        </div>
+      </>
+    );
+  }
+  
   return (
     <>
       <div className='flex items-center justify-left ml-20 space-x-4 p-4'>
@@ -68,7 +84,7 @@ const Home = () => {
         ) : (
           filteredRestaurants.map((restaurant) => (
             <Link to={`/restaurant/${restaurant.info.id}`} key={restaurant.info.id}>
-            <RestaurantCard {...restaurant.info} key={restaurant.info.id} />
+              <RestaurantCard {...restaurant.info} />
             </Link>
           ))
         )}

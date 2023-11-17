@@ -3,36 +3,15 @@ import { useParams } from 'react-router-dom';
 import { FcRating } from 'react-icons/fc';
 import { img_url } from '../config';
 import MenuShimmer from '../Utils/MenuShimmer';
+import useRestaurant from '../Utils/useRestaurant';
 
 const RestaurantMenu = () => {
   const { resId } = useParams();
-  const [restaurant, setRestaurant] = useState({});
-  const [menuItems, setMenuItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { restaurant, menuItems, isLoading } = useRestaurant(resId);
 
-  useEffect(() => {
-    getRestaurantInfo();
-  }, []);
-
-  async function getRestaurantInfo() {
-    try {
-      const data = await fetch(`https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=29.0265736&lng=77.6886853&restaurantId=${resId}`);
-      const json = await data.json();
-
-      const resInfo = json.data.cards[0]?.card?.card?.info || {};
-      const menuItems = json.data.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards || [];
-
-      setRestaurant(resInfo);
-      setMenuItems(menuItems);
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching restaurant information:', error);
-      setIsLoading(false);
-    }
-  }
+ 
 
   if (isLoading) {
-    // Render shimmer effect while loading
     return (
       <div className='container mx-auto mt-10'>
         <h1 className='text-3xl font-bold mb-4'>Restaurant Menu</h1>
