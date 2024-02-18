@@ -11,17 +11,44 @@ const Home = () => {
   const [allrestaurants, setAllRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const swiggy_api_URL =
+  "https://corsproxy.org/?" +
+  encodeURIComponent(
+    "https://www.swiggy.com/dapi/restaurants/list/v5?"
+  );
 
   useEffect(() => {
-    getRestaurants();
+    // Get user's current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+          getRestaurants(position.coords.latitude, position.coords.longitude);
+        },
+        error => {
+          console.error('Error getting current location:', error);
+          // Handle error, maybe show a default location
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      // Handle case where geolocation is not supported
+    }
   }, []);
 
-  async function getRestaurants() {
+  async function getRestaurants(lat, lng) {
     try {
-      const data = await fetch('https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.6691565&lng=77.45375779999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING');
+      // const data = await fetch(`${swiggy_api_URL+ `lat=${lat}&lng=${lng}&page_type=DESKTOP_WEB_LISTING`}`);
+      const data = await fetch(`${swiggy_api_URL+ `lat=28.753593&lng=77.4916239&page_type=DESKTOP_WEB_LISTING`}`);
       const json = await data.json();
+      console.log(json);
 
-      const list = json?.data?.cards[5]?.card.card.gridElements.infoWithStyle.restaurants;
+      const list = json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
+      ?.restaurants;
+      console.log(list);
       setAllRestaurants(list);
       setFilteredRestaurants(list);
       setIsLoading(false);
@@ -79,10 +106,10 @@ const Home = () => {
       <div className='flex flex-wrap p-4 justify-center gap-2'>
         {isLoading ? (
           <Shimmer />
-        ) : filteredRestaurants.length === 0 ? (
+        ) : filteredRestaurants?.length === 0 ? (
           <h1 className='text-2xl font-bold text-center'>No Restaurants Found</h1>
         ) : (
-          filteredRestaurants.map((restaurant) => (
+          filteredRestaurants?.map((restaurant) => (
             <Link to={`/restaurant/${restaurant.info.id}`} key={restaurant.info.id}>
               <RestaurantCard {...restaurant.info} />
             </Link>

@@ -1,8 +1,11 @@
 import React from 'react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+
+  const cartItems = useSelector(store => store.cart.products);
 
 
   return (
@@ -11,19 +14,17 @@ const Navbar = () => {
         <img src={logo} alt='Logo' className='h-28 rounded-full' />
 
         <ul className='flex gap-8 space-x-4 text-lg font-semibold'>
-      
           <li>
             <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/'>Home</Link>
           </li>
           <li>
-          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/about'>About</Link>
+            <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/about'>About</Link>
           </li>
           <li>
-          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/contact'>Contact</Link>
+            <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/contact'>Contact</Link>
           </li>
-
           <li>
-          <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/cart'>Cart</Link>
+            <Link className='text-slate-800 hover:text-orange-500 transition duration-300' to='/cart'>Cart-{cartItems?.length ?? 0} items</Link>
           </li>
         </ul>
       </div>
