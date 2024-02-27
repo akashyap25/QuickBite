@@ -19,7 +19,7 @@ const Navbar = () => {
       } else {
         try {
           const { data } = await axios.post(
-            'https://dashing-panda-b4962a.netlify.app/',
+            'https://main--dashing-panda-b4962a.netlify.app/',
             {},
             {
               withCredentials: true,
