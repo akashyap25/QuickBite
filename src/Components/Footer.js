@@ -50,7 +50,7 @@ const Footer = () => {
       </div>
 
       <div className='mt-8 border-t border-gray-700 pt-6 text-center'>
-        <p>&copy; 2023 Your Food Delivery App. All rights reserved.</p>
+        <p>&copy; 2023 QuickBite. All rights reserved.</p>
       </div>
     </footer>
   );

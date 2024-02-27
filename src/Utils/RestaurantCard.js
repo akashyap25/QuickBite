@@ -3,6 +3,11 @@ import { FcRating } from 'react-icons/fc';
 import { img_url } from '../config';
 
 const RestaurantCard = (restaurant,id) => {
+  let cuisines = restaurant.cuisines;
+  const size = cuisines.length;
+   cuisines = cuisines.slice(0, 3).join(',')+ (size > 3 ? ',...' : '');
+
+
   return (
     <div className='flex flex-wrap justify-center items-center gap-4'>
       <div
@@ -20,7 +25,7 @@ const RestaurantCard = (restaurant,id) => {
           <FcRating className='ml-1' />
           <h2 className='text-sm font-bold'>, {restaurant.sla.slaString}</h2>
         </div>
-        <h3 className='text-md mt-1 overflow-hidden'>{restaurant.cuisines.join(',')}</h3>
+        <h3 className='text-md mt-1 overflow-hidden'>{cuisines}</h3>
         <h3 className='text-md'>{restaurant.areaName}</h3>
       </div>
     </div>

@@ -12,12 +12,12 @@ const Contact = () => {
           You can contact us through the following channels:
         </p>
         <ul className='list-disc pl-6 mb-4'>
-          <li>Email: <span className='text-blue-500'>contact@[yourappname].com</span></li>
-          <li>Phone: <span className='text-blue-500'>[Your contact number]</span></li>
-          <li>Visit our office: <span className='text-blue-500'>[Your office address]</span></li>
+          <li>Email: <span className='text-blue-500'>contact@[QuickBite].com</span></li>
+          <li>Phone: <span className='text-blue-500'>[+91-1234567890]</span></li>
+          <li>Visit our office: <span className='text-blue-500'>[Muradnagar,Ghaziabad,Uttar Pradesh, India]</span></li>
         </ul>
         <p>
-          Our support team is available to help you from <span className='text-blue-500'>[Office hours]</span>. We look forward to hearing from you!
+          Our support team is available to help you from <span className='text-blue-500'>[9:00am-5:00pm]</span>. We look forward to hearing from you!
         </p>
       </div>
     </div>

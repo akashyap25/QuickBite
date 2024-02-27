@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 import { filterData } from '../Utils/Helper';
 import { useOnline } from '../Utils/useOnline';
 import offline_img from "../assets/offline.png";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const Home = () => {
   const [searchText, setSearchText] = useState('');
@@ -14,13 +18,42 @@ const Home = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const swiggy_api_URL =
-  "https://corsproxy.org/?" +
-  encodeURIComponent(
-    "https://www.swiggy.com/dapi/restaurants/list/v5?"
-  );
+    "https://corsproxy.org/?" +
+    encodeURIComponent(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?"
+    );
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies([]);
 
   useEffect(() => {
-    // Get user's current location
+    const verifyUser = async () => {
+      if (!cookies.jwt) {
+        navigate("/login");
+      } else {
+        try {
+          const { data } = await axios.post(
+            "http://localhost:3002",
+            {},
+            {
+              withCredentials: true,
+            }
+          );
+          if (!data.status) {
+            removeCookie("jwt");
+            navigate("/login");
+          }
+        } catch (error) {
+          removeCookie("jwt");
+          navigate("/login");
+        }
+      }
+    };
+  
+    verifyUser();
+  }, [cookies, navigate, removeCookie]);
+  
+
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -30,25 +63,22 @@ const Home = () => {
         },
         error => {
           console.error('Error getting current location:', error);
-          // Handle error, maybe show a default location
         }
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
-      // Handle case where geolocation is not supported
     }
   }, []);
 
+ 
+
   async function getRestaurants(lat, lng) {
     try {
-      // const data = await fetch(`${swiggy_api_URL+ `lat=${lat}&lng=${lng}&page_type=DESKTOP_WEB_LISTING`}`);
-      const data = await fetch(`${swiggy_api_URL+ `lat=28.753593&lng=77.4916239&page_type=DESKTOP_WEB_LISTING`}`);
+      const data = await fetch(`${swiggy_api_URL}lat=${lat}&lng=${lng}&page_type=DESKTOP_WEB_LISTING`);
       const json = await data.json();
-      console.log(json);
 
-      const list = json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
-      ?.restaurants;
-      console.log(list);
+      const list = json?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle
+        ?.restaurants;
       setAllRestaurants(list);
       setFilteredRestaurants(list);
       setIsLoading(false);
@@ -73,7 +103,6 @@ const Home = () => {
 
   if (!isOnline) {
     return (
-      <>
       <div className='m-20'>
         <h1 className='text-xl font-bold flex justify-center '>
           🔴 Offline, please check your internet connection!
@@ -83,27 +112,23 @@ const Home = () => {
           src={offline_img}
           alt='Error'
         />
-        </div>
-      </>
+      </div>
     );
   }
-  
+
   return (
-    <>
-      <div className='flex items-center justify-left ml-20 space-x-4 p-4'>
+    <div className='px-4 md:px-8 lg:px-16 xl:px-20'>
+      <div className='flex flex-col md:flex-row items-center justify-between md:mt-8'>
         <input
           type='text'
-          className='w-80 outline-none border border-red-700 caret-orange-500 p-2 rounded-lg text-slate-800 focus:border-orange-500 transition duration-300'
+          className='w-full md:w-80 outline-none border border-red-700 caret-orange-500 p-2 rounded-lg text-slate-800 focus:border-orange-500 transition duration-300 mb-4 md:mb-0'
           placeholder='Search...'
           value={searchText}
           onChange={handleChange}
         />
+        <h1 className='text-2xl font-bold text-center md:text-left'>Top Restaurants</h1>
       </div>
-
-      <div>
-        <h1 className='text-2xl font-bold text-center'>Top Restaurants</h1>
-      </div>
-      <div className='flex flex-wrap p-4 justify-center gap-2'>
+      <div className='flex flex-wrap justify-center gap-2'>
         {isLoading ? (
           <Shimmer />
         ) : filteredRestaurants?.length === 0 ? (
@@ -116,8 +141,14 @@ const Home = () => {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 };
 
 export default Home;
+
+
+
+
+
+//22:30

@@ -31,12 +31,12 @@ const RestaurantMenu = () => {
       <h1 className='text-3xl font-bold mb-4'>Restaurant Menu</h1>
       <div className='flex flex-col items-center justify-center'>
         <h2 className='text-2xl font-bold mb-2'>{restaurant.name}</h2>
-        <div className='flex mb-4 flex-wrap'>
+        <div className='flex flex-col lg:flex-row items-center mb-4'>
           <div className='w-full lg:w-2/3 pr-4 mb-4 lg:mb-0'>
             <h3 className='text-md mt-1 overflow-hidden'>{restaurant.cuisines?.join(',')}</h3>
             <h3 className='text-md'>{restaurant.city}</h3>
           </div>
-          <div className='w-full lg:w-1/3 flex items-center'>
+          <div className='w-full lg:w-1/3 flex items-center justify-center lg:justify-end'>
             <div className='w-20 h-16 flex flex-col mx-auto items-center border border-slate-400 shadow-lg'>
               <div className='m-1 flex'>
                 <h2 className='text-sm font-bold'>{restaurant.avgRating}</h2>
@@ -51,7 +51,7 @@ const RestaurantMenu = () => {
 
         {menuItems.map((menu) => (
           <div key={menu.card.info.id} className='mb-8 p-4 rounded-lg shadow-lg w-full lg:w-1/2'>
-            <div className='flex flex-wrap'>
+            <div className='flex flex-col lg:flex-row'>
               <div className='w-full lg:w-2/3 pr-4'>
                 <h2 className='text-2xl font-semibold'>{menu.card.info.name}</h2>
                 <p className='text-sm text-gray-600 mb-4'>{menu.card.info.description}</p>

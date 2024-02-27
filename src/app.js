@@ -12,6 +12,11 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import store from './Utils/store';
 import { Provider } from 'react-redux';
 import Cart from './Components/Cart';
+import Login from './Components/Login';
+import Register from './Components/Register';
+
+
+
 
 
 const AppLayout = () => {
@@ -30,32 +35,46 @@ const AppLayout = () => {
 const appRouter = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout/>,
-    errorElement: <Error/>,
+    element: <AppLayout />,
+    errorElement: <Error />,
     children: [
       {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
         path: '/',
-        element: <Home/>,
+        element: <Outlet />,
+        children: [
+          {
+            path: '/',
+            element: <Home />,
+          },
+          {
+            path: '/contact',
+            element: <Contact />,
+          },
+          {
+            path: '/about',
+            element: <About />,
+          },
+          {
+            path: '/restaurant/:resId',
+            element: <RestaurantMenu />,
+          },
+          {
+            path: '/cart',
+            element: <Cart />,
+          },
+        ],
       },
-      {
-        path: '/contact',
-        element: <Contact/>,
-      },
-      {
-        path: '/about',
-        element: <About/>,
-      },
-      {
-        path: '/restaurant/:resId',
-        element: <RestaurantMenu/>,
-      },
-      {
-        path: '/cart',
-        element: <Cart/>,
-      }
-    ]
+    ],
   },
-  ]);
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<RouterProvider router={appRouter} />);
