@@ -26,7 +26,7 @@ function Login() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3002/login",
+        "https://dashing-panda-b4962a.netlify.app/login",
         {
           ...values,
         },
