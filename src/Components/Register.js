@@ -23,7 +23,7 @@ function Register() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://main--dashing-panda-b4962a.netlify.app/",
+        "https://dashing-panda-b4962a.netlify.app/register",
         {
           ...values,
         },
