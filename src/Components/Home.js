@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { backend_url } from '../config';
 
 const Home = () => {
   const [searchText, setSearchText] = useState('');
@@ -32,7 +33,7 @@ const Home = () => {
       } else {
         try {
           const { data } = await axios.post(
-            "https://dashing-panda-b4962a.netlify.app",
+            backend_url,
             {},
             {
               withCredentials: true,

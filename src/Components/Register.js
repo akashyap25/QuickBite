@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
+import {backend_url} from "../config";
 
 function Register() {
   const [cookies] = useCookies(["cookie-name"]);
@@ -23,7 +24,7 @@ function Register() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://dashing-panda-b4962a.netlify.app/register",
+        backend_url + "/register",
         {
           ...values,
         },

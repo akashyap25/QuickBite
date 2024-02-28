@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {backend_url} from "../config";
 
 function Login() {
   const [cookies] = useCookies([]);
@@ -26,7 +27,7 @@ function Login() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://dashing-panda-b4962a.netlify.app/login",
+        backend_url + "/login",
         {
           ...values,
         },

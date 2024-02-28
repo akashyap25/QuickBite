@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import {backend_url} from '../config';
 
 const Navbar = () => {
   const cartItems = useSelector(store => store.cart.products);
@@ -19,7 +20,7 @@ const Navbar = () => {
       } else {
         try {
           const { data } = await axios.post(
-            'https://dashing-panda-b4962a.netlify.app',
+            backend_url,
             {},
             {
               withCredentials: true,
