@@ -26,32 +26,32 @@ const Home = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
 
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (!cookies.jwt) {
-        navigate("/login");
-      } else {
-        try {
-          const { data } = await axios.post(
-            backend_url,
-            {},
-            {
-              withCredentials: true,
-            }
-          );
-          if (!data.status) {
-            removeCookie("jwt");
-            navigate("/login");
-          }
-        } catch (error) {
-          removeCookie("jwt");
-          navigate("/login");
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const verifyUser = async () => {
+  //     if (!cookies.jwt) {
+  //       navigate("/login");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           backend_url,
+  //           {},
+  //           {
+  //             withCredentials: true,
+  //           }
+  //         );
+  //         if (!data.status) {
+  //           removeCookie("jwt");
+  //           navigate("/login");
+  //         }
+  //       } catch (error) {
+  //         removeCookie("jwt");
+  //         navigate("/login");
+  //       }
+  //     }
+  //   };
   
-    verifyUser();
-  }, [cookies, navigate, removeCookie]);
+  //   verifyUser();
+  // }, [cookies, navigate, removeCookie]);
   
 
   useEffect(() => {
