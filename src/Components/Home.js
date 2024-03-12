@@ -8,86 +8,90 @@ import offline_img from "../assets/offline.png";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
 import { backend_url } from '../config';
+import { restaurantList } from '../config';
 
 const Home = () => {
   const [searchText, setSearchText] = useState('');
   const [allrestaurants, setAllRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const swiggy_api_URL =
-    "https://corsproxy.org/?" +
-    encodeURIComponent(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?"
-    );
+  // const [latitude, setLatitude] = useState(null);
+  // const [longitude, setLongitude] = useState(null);
+  // const swiggy_api_URL =
+  //   "https://corsproxy.org/?" +
+  //   encodeURIComponent(
+  //     "https://www.swiggy.com/dapi/restaurants/list/v5?"
+  //   );
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
 
-  // useEffect(() => {
-  //   const verifyUser = async () => {
-  //     if (!cookies.jwt) {
-  //       navigate("/login");
-  //     } else {
-  //       try {
-  //         const { data } = await axios.post(
-  //           backend_url,
-  //           {},
-  //           {
-  //             withCredentials: true,
-  //           }
-  //         );
-  //         if (!data.status) {
-  //           removeCookie("jwt");
-  //           navigate("/login");
-  //         }
-  //       } catch (error) {
-  //         removeCookie("jwt");
-  //         navigate("/login");
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (!cookies.jwt) {
+        navigate("/login");
+      } else {
+        try {
+          const { data } = await axios.post(
+            backend_url,
+            {},
+            {
+              withCredentials: true,
+            }
+          );
+          if (!data.status) {
+            removeCookie("jwt");
+            navigate("/login");
+          }
+        } catch (error) {
+          removeCookie("jwt");
+          navigate("/login");
+        }
+      }
+    };
   
-  //   verifyUser();
-  // }, [cookies, navigate, removeCookie]);
+    verifyUser();
+  }, [cookies, navigate, removeCookie]);
   
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-          getRestaurants(position.coords.latitude, position.coords.longitude);
-        },
-        error => {
-          console.error('Error getting current location:', error);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       position => {
+  //         setLatitude(position.coords.latitude);
+  //         setLongitude(position.coords.longitude);
+  //         getRestaurants(position.coords.latitude, position.coords.longitude);
+  //       },
+  //       error => {
+  //         console.error('Error getting current location:', error);
+  //       }
+  //     );
+  //   } else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  // }, []);
 
  
 
-  async function getRestaurants(lat, lng) {
-    try {
-      const data = await fetch(`${swiggy_api_URL}lat=${lat}&lng=${lng}&page_type=DESKTOP_WEB_LISTING`);
-      const json = await data.json();
+ 
 
-      const list = json?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-      setAllRestaurants(list);
-      setFilteredRestaurants(list);
+  async function getRestaurants() {
+    try {
+      const data = restaurantList
+      setAllRestaurants(data);
+      setFilteredRestaurants(data);
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    getRestaurants();
+  }, []);
+
+
 
   const handleChange = (e) => {
     const searchTextValue = e.target.value;
@@ -118,8 +122,8 @@ const Home = () => {
   }
 
   return (
-    <div className='px-4 md:px-8 lg:px-16 xl:px-20'>
-      <div className='flex flex-col md:flex-row items-center justify-between md:mt-8'>
+    <div className='px-4 md:px-8 lg:px-16 xl:px-20 py-10'>
+      <div className='flex flex-col md:flex-row items-center justify-between md:mt-8 mb-4'>
         <input
           type='text'
           className='w-full md:w-80 outline-none border border-red-700 caret-orange-500 p-2 rounded-lg text-slate-800 focus:border-orange-500 transition duration-300 mb-4 md:mb-0'

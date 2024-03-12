@@ -49,30 +49,35 @@ const RestaurantMenu = () => {
           </div>
         </div>
 
-        {menuItems.map((menu) => (
-          <div key={menu.card.info.id} className='mb-8 p-4 rounded-lg shadow-lg w-full lg:w-1/2'>
-            <div className='flex flex-col lg:flex-row'>
-              <div className='w-full lg:w-2/3 pr-4'>
-                <h2 className='text-2xl font-semibold'>{menu.card.info.name}</h2>
-                <p className='text-sm text-gray-600 mb-4'>{menu.card.info.description}</p>
-                <p className='text-xl font-semibold'>₹{Math.round(menu.card.info.price/100)}.00</p>
-              </div>
-              <div className='w-full lg:w-1/3 flex justify-center'>
-                <img
-                  src={img_url + menu.card.info.imageId}
-                  alt={menu.card.info.name}
-                  className='mt-4 rounded-lg shadow-md'
-                  style={{ width: '50%', height: '50%' }}
-                />
-              </div>
-            </div>
-            <div className='w-full mt-4 flex justify-center'>
-              <button className='bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-400' onClick={() => addFoodItem(menu)}>  
-                Add Item
-              </button>
-            </div>
+        {menuItems.length === 0 ? (
+          <div className="text-center text-xl font-bold text-gray-500 py-8">
+            No items available at the moment.
           </div>
-        ))}
+        ) : (
+          menuItems.map((menu) => (
+            <div key={menu.card.info.id} className='mb-8 p-4 rounded-lg shadow-lg w-full lg:w-1/2'>
+              <div className='flex flex-col lg:flex-row'>
+                <div className='w-full lg:w-2/3 pr-4'>
+                  <h2 className='text-2xl font-semibold'>{menu.card.info.name}</h2>
+                  <p className='text-sm text-gray-600 mb-4'>{menu.card.info.description}</p>
+                  <p className='text-xl font-semibold'>₹{Math.round(menu.card.info.price/100)}.00</p>
+                </div>
+                <div className='w-full lg:w-1/3 flex justify-center'>
+                  <img
+                    src={img_url + menu.card.info.imageId}
+                    alt={menu.card.info.name}
+                    className='mt-4 rounded-lg shadow-md h-2/3 w-2/3 object-cover'
+                  />
+                </div>
+              </div>
+              <div className='w-full mt-4 flex justify-center'>
+                <button className='bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-400' onClick={() => addFoodItem(menu)}>  
+                  Add Item
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

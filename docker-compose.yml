@@ -1,0 +1,12 @@
+version: "2"  # Docker Compose version
+
+services:  # Define services to run
+  nginx-react:  # Service name
+    container_name: ngixreactapp  # Name of the container
+    build:  # Configuration for building the Docker image
+      context: .  # Path to the Dockerfile and other build context
+      dockerfile: Dockerfile  # Path to the Dockerfile to use
+    ports:  # Port mapping to expose ports from the container to the host
+      - 80:80  # Map port 80 on the host to port 80 in the container
+    environment:  # Environment variables to set in the container
+      NODE_ENV: production  # Set NODE_ENV to "production"
