@@ -67,12 +67,17 @@ const Cart = () => {
         </div>
       </div>
       {/* Add the checkout button */}
-      <div className="flex justify-center mt-8">
+      {
+        cartItems.length===0? (<h1 className='text-2xl font-bold text-center'>No Items in the Cart</h1>)
+        : <div className="flex justify-center mt-8">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" 
         onClick={handleCheckout}>
           Checkout
           </button>
       </div>
+
+      }
+      
     </>
   );
 };
