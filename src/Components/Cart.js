@@ -1,12 +1,13 @@
-// Cart.js
 import React from 'react';
 import { img_url } from '../config';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { clearCart, removeFromCart, increaseItemCount, decreaseItemCount, addToCart } from '../Utils/cartSlice';
+import { useNavigate } from 'react-router-dom'; // Import useHistory for navigation
 
 const Cart = () => {
   const cartItems = useSelector(store => store.cart.products);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Get the history object for navigation
 
   const handleClearCart = () => {
     dispatch(clearCart());
@@ -26,6 +27,11 @@ const Cart = () => {
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
+  };
+
+  const handleCheckout = () => {
+    // Redirect to the checkout page when the checkout button is clicked
+    navigate('/checkout');
   };
 
   return (
@@ -59,6 +65,13 @@ const Cart = () => {
             </div>
           ))}
         </div>
+      </div>
+      {/* Add the checkout button */}
+      <div className="flex justify-center mt-8">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" 
+        onClick={handleCheckout}>
+          Checkout
+          </button>
       </div>
     </>
   );
