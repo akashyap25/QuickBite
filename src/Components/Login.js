@@ -56,6 +56,7 @@ function Login() {
             </label>
             <input
               type="text"
+              id="identifier"
               name="identifier"
               placeholder="Email or Username"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -71,6 +72,7 @@ function Login() {
             <input
               type="password"
               placeholder="Password"
+              id="password"
               name="password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(e) =>

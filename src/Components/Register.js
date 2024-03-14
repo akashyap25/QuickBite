@@ -8,13 +8,15 @@ import { backend_url } from "../config";
 function Register() {
   const [cookies] = useCookies(["cookie-name"]);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (cookies.jwt) {
       navigate("/");
     }
   }, [cookies, navigate]);
 
-  const [values, setValues] = useState({ email: "", password: "" });
+  const [values, setValues] = useState({ username: "", email: "", password: "" });
+
   const generateError = (error) =>
     toast.error(error, {
       position: "bottom-right",
@@ -24,42 +26,45 @@ function Register() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        backend_url + "/register",
-        {
-          ...values,
-        },
+        `${backend_url}/register`,
+        values,
         { withCredentials: true }
       );
-      if (data) {
-        if (data.errors) {
-          const { email, password } = data.errors;
-          if (email) generateError(email);
-          else if (password) generateError(password);
-        } else {
-          navigate("/");
-        }
+      if (data.errors) {
+        const { email, password, username } = data.errors;
+        if (email) generateError(email);
+        else if (password) generateError(password);
+        else if (username) generateError(username);
+      } else {
+        navigate("/");
       }
     } catch (ex) {
-      console.log(ex);
+      console.error(ex);
     }
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
   return (
     <div className="container mx-auto h-screen flex justify-center items-center">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-2xl mb-6 text-center">Register Account</h2>
-        <form onSubmit={(e) => handleSubmit(e)}>
-        <div className="mb-6">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
             <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
               Username
             </label>
             <input
-              type="username"
-              placeholder="username"
+              type="text"
               name="username"
+              id="username"
+              placeholder="Username"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) =>
-                setValues({ ...values, [e.target.name]: e.target.value })
-              }
+              onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-4">
@@ -69,11 +74,11 @@ function Register() {
             <input
               type="email"
               name="email"
+              id="email"
               placeholder="Email"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) =>
-                setValues({ ...values, [e.target.name]: e.target.value })
-              }
+              onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-6">
@@ -82,15 +87,14 @@ function Register() {
             </label>
             <input
               type="password"
-              placeholder="Password"
               name="password"
+              id="password"
+              placeholder="Password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) =>
-                setValues({ ...values, [e.target.name]: e.target.value })
-              }
+              onChange={handleChange}
+              required
             />
           </div>
-       
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
