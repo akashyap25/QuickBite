@@ -14,10 +14,7 @@ import { Provider } from 'react-redux';
 import Cart from './Components/Cart';
 import Login from './Components/Login';
 import Register from './Components/Register';
-
-
-
-
+import CheckoutForm from './Components/CheckoutForm';
 
 const AppLayout = () => {
   return (
@@ -38,14 +35,14 @@ const appRouter = createBrowserRouter([
     element: <AppLayout />,
     errorElement: <Error />,
     children: [
-      // {
-      //   path: '/login',
-      //   element: <Login />,
-      // },
-      // {
-      //   path: '/register',
-      //   element: <Register />,
-      // },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
       {
         path: '/',
         element: <Outlet />,
@@ -70,6 +67,10 @@ const appRouter = createBrowserRouter([
             path: '/cart',
             element: <Cart />,
           },
+          {
+            path: '/checkout',
+            element: <CheckoutForm />,
+          }
         ],
       },
     ],

@@ -1,6 +1,7 @@
 export const img_url = "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/";
 export const FETCH_MENU_URL = "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=29.0265736&lng=77.6886853&restaurantId="
-export const backend_url = "https://quickbite-server-8k8f.onrender.com"
+export const backend_url = "http://localhost:3002";
+
 export  const restaurantList =  [
     {
         "info": {
@@ -1764,3 +1765,5 @@ export  const restaurantList =  [
         }
     }
 ]
+
+

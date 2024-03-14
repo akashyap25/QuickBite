@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import {backend_url} from '../config';
+import { backend_url } from '../config';
 
 const Navbar = () => {
   const cartItems = useSelector(store => store.cart.products);

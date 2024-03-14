@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {backend_url} from "../config";
+import { backend_url } from "../config";
 
 function Login() {
   const [cookies] = useCookies([]);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
-import {backend_url} from "../config";
+import { backend_url } from "../config";
 
 function Register() {
   const [cookies] = useCookies(["cookie-name"]);
