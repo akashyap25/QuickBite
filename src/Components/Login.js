@@ -59,6 +59,7 @@ function Login() {
               id="identifier"
               name="identifier"
               placeholder="Email or Username"
+              autoComplete="username" // Add autocomplete attribute
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(e) =>
                 setValues({ ...values, [e.target.name]: e.target.value })
@@ -74,6 +75,7 @@ function Login() {
               placeholder="Password"
               id="password"
               name="password"
+              autoComplete="current-password" // Add autocomplete attribute
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(e) =>
                 setValues({ ...values, [e.target.name]: e.target.value })
