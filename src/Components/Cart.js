@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { img_url } from '../config';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { clearCart, removeFromCart, increaseItemCount, decreaseItemCount, addToCart } from '../Utils/cartSlice';
-import { useNavigate } from 'react-router-dom'; // Import useHistory for navigation
+import { useNavigate } from 'react-router-dom'; 
+import  verifyUser  from '../Utils/verifyUser';
 
 const Cart = () => {
+
+  verifyUser();
+
+
   const cartItems = useSelector(store => store.cart.products);
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Get the history object for navigation
@@ -67,17 +72,12 @@ const Cart = () => {
         </div>
       </div>
       {/* Add the checkout button */}
-      {
-        cartItems.length===0? (<h1 className='text-2xl font-bold text-center'>No Items in the Cart</h1>)
-        : <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-8">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" 
         onClick={handleCheckout}>
           Checkout
           </button>
       </div>
-
-      }
-      
     </>
   );
 };
