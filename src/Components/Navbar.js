@@ -3,49 +3,29 @@ import logo from '../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
-import { backend_url } from '../config';
+import user_logo from '../assets/user.png';
 
 const Navbar = () => {
   const cartItems = useSelector(store => store.cart.products);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null); 
   const navigate = useNavigate();
-  const [cookies, , removeCookie] = useCookies([]); // Removed setCookie since it's not used
-
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (!cookies.jwt) {
-        setIsUserLoggedIn(false);
-      } else {
-        try {
-          const { data } = await axios.post(
-            backend_url,
-            {},
-            {
-              withCredentials: true,
-            }
-          );
-          if (data.status) {
-            setIsUserLoggedIn(true);
-          } else {
-            removeCookie('jwt');
-            setIsUserLoggedIn(false);
-          }
-        } catch (error) {
-          removeCookie('jwt');
-          setIsUserLoggedIn(false);
-        }
-      }
-    };
-    verifyUser();
-  }, [cookies, removeCookie]);
+  const [cookies, , removeCookie] = useCookies([]);
   
-
+  useEffect(() => {
+    const token = cookies.jwt;
+    if (token) {
+      setIsUserLoggedIn(true);
+    } else {
+      setIsUserLoggedIn(false);
+    }
+  }, [cookies.jwt]);
+  
   const logOut = () => {
     removeCookie('jwt');
     setIsUserLoggedIn(false);
-    navigate('/login');  // Navigate to login page after logout
+    navigate('/login');
   };
 
   const handleButtonClick = () => {
@@ -54,6 +34,10 @@ const Navbar = () => {
     } else {
       navigate('/login');
     }
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -65,7 +49,7 @@ const Navbar = () => {
           </Link>
           <button
             className='block lg:hidden text-xl text-slate-800 focus:outline-none'
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={toggleMenu}
           >
             {isMenuOpen ? (
               <svg
@@ -127,14 +111,44 @@ const Navbar = () => {
               Cart-{cartItems?.length ?? 0} items
             </Link>
           </li>
-          <li>
-            <button
-              className='bg-orange-500 hover:bg-orange-700 hover:text-white text-slate-800 ml-20 py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300'
-              onClick={handleButtonClick}
-            >
-              {isUserLoggedIn ? 'Logout' : 'Login'}
-            </button>
-          </li>
+          {isUserLoggedIn ? (
+            <li className='relative'>
+              <img
+                src={user_logo}
+                alt='User Logo'
+                className='h-10 w-10 cursor-pointer'
+                onClick={toggleMenu}
+              />
+              {isMenuOpen && (
+                <ul className='absolute right-0 mt-2 bg-white rounded-lg shadow-lg py-1'>
+                  <li className='px-4 py-2'>
+                    {userData && (
+                      <div>
+                        <p>{userData.username}</p>
+                      </div>
+                    )}
+                  </li>
+                  <li className='px-4 py-2'>
+                    <button
+                      className='text-red-500 hover:text-red-700'
+                      onClick={logOut}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </li>
+          ) : (
+            <li>
+              <button
+                className='bg-orange-500 hover:bg-orange-700 hover:text-white text-slate-800 ml-20 py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300'
+                onClick={handleButtonClick}
+              >
+                Login
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import '../index.css';
 import Navbar from './Components/Navbar';
@@ -17,15 +17,22 @@ import Register from './Components/Register';
 import CheckoutForm from './Components/CheckoutForm';
 
 const AppLayout = () => {
+
+ 
+
+ 
+
   return (
     <Provider store={store}>
     
-      <Navbar  />
+      <Navbar />
       <Outlet />
       <Footer/>
     
     </Provider>
   );
+
+
 };
 
 

@@ -12,8 +12,11 @@ const useRestaurant = (restaurantId) => {
         const data = await fetch(FETCH_MENU_URL + restaurantId);
         const json = await data.json();
 
-        const resInfo = json.data.cards[0]?.card?.card?.info || {};
-        const menuItems = json.data.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards || [];
+        console.log(json);
+
+        const resInfo = json.data.cards[2]?.card?.card?.info || {};
+        console.log(resInfo);
+        const menuItems = json.data.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card?.itemCards || [];
         console.log(menuItems);
 
         setRestaurant(resInfo);
