@@ -15,24 +15,17 @@ import Cart from './Components/Cart';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import CheckoutForm from './Components/CheckoutForm';
+import PrivateRoute from './Utils/PrivateRoute';
+import UserVerify from './Components/UserVerify';
 
 const AppLayout = () => {
-
- 
-
- 
-
   return (
     <Provider store={store}>
-    
       <Navbar />
       <Outlet />
-      <Footer/>
-    
-    </Provider>
+      <Footer />
+    </Provider>   
   );
-
-
 };
 
 
@@ -49,6 +42,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/register',
         element: <Register />,
+      },
+      {
+        path: '/:id/verify/:token',
+        element: <UserVerify />,
       },
       {
         path: '/',
@@ -76,8 +73,8 @@ const appRouter = createBrowserRouter([
           },
           {
             path: '/checkout',
-            element: <CheckoutForm />,
-          }
+            element: <PrivateRoute><CheckoutForm /></PrivateRoute>,
+          },
         ],
       },
     ],

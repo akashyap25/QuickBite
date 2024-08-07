@@ -1,100 +1,128 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { backend_url } from "../config";
 
-function Login() {
-  const [cookies] = useCookies([]);
+function UserLogin() {
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (cookies.jwt) {
-      navigate("/");
-    }
-  }, [cookies.jwt, navigate]);
 
-  const [values, setValues] = useState({ identifier: "", password: "" });
+  axios.defaults.withCredentials = true;
 
-  const generateError = (error) =>
-    toast.error(error, {
-      position: "bottom-right",
-    });
+  const [message, setMessage] = useState("");
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const { data } = await axios.post(
-        backend_url + "/login",
-        {
-          ...values,
-        },
-        { withCredentials: true }
-      );
-      if (data) {
-        if (data.error) {
-          generateError(data.error);
+  const onInputChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post("http://localhost:3002/api/users/login", loginData)
+      .then((response) => {
+        if (response.data.success) {
+          window.location.href = "/";
         } else {
-          navigate("/");
+          setMessage(response.data.message);
         }
-      }
-    } catch (ex) {
-      console.log(ex);
-    }
+      })
+      .catch((error) => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Network error";
+        setMessage(errorMessage);
+      });
   };
 
   return (
-    <div className="container mx-auto h-screen flex justify-center items-center">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl mb-6 text-center">Login to your Account</h2>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <div className="mb-4">
-            <label htmlFor="identifier" className="block text-gray-700 text-sm font-bold mb-2">
-              Email or Username
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:border dark:border-gray-700">
+        <h1 className="mb-6 text-2xl font-semibold text-center text-gray-900 dark:text-white">
+          Sign in to your account
+        </h1>
+        {message && (
+          <div className="mb-4 text-center text-red-500">{message}</div>
+        )}
+        <form className="space-y-6" onSubmit={submit}>
+          <div>
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Your email
             </label>
             <input
-              type="text"
-              name="identifier"
-              placeholder="Email or Username"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) =>
-                setValues({ ...values, [e.target.name]: e.target.value })
-              }
+              type="email"
+              name="email"
+              id="email"
+              value={loginData.email}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
+              placeholder="name@company.com"
+              required
             />
           </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Password
             </label>
             <input
               type="password"
-              placeholder="Password"
               name="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) =>
-                setValues({ ...values, [e.target.name]: e.target.value })
-              }
+              id="password"
+              value={loginData.password}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
+              placeholder="••••••••"
+              required
             />
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember"
+                type="checkbox"
+                className="w-4 h-4 text-orange-400 border-gray-300 rounded focus:ring-2 focus:ring-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-orange-400"
+              />
+              <label
+                htmlFor="remember"
+                className="ml-2 text-sm text-gray-600 dark:text-gray-300"
+              >
+                Remember me
+              </label>
+            </div>
+            <Link
+              to="/forgot-password"
+              className="text-sm font-medium text-orange-400 hover:underline dark:text-orange-400"
+            >
+              Forgot password?
+            </Link>
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full px-5 py-2.5 text-sm font-medium text-white bg-orange-400 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
-            Submit
+            Sign In
           </button>
-          <span className="block text-center mt-4">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-blue-500 hover:underline">
-              Register
+          <p className="text-sm text-center text-gray-600 dark:text-gray-300">
+            Don’t have an account yet?{" "}
+            <Link
+              to="/register"
+              className="font-medium text-orange-400 hover:underline dark:text-orange-400"
+            >
+              Sign up
             </Link>
-          </span>
+          </p>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 }
 
-export default Login;
+export default UserLogin;

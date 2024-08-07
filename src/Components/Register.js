@@ -1,120 +1,140 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { useCookies } from "react-cookie";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { backend_url } from "../config";
 
-function Register() {
-  const [cookies] = useCookies(["cookie-name"]);
+function UserRegister() {
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
 
-  useEffect(() => {
-    if (cookies.jwt) {
-      navigate("/");
-    }
-  }, [cookies, navigate]);
-
-  const [values, setValues] = useState({ username: "", email: "", password: "" });
-
-  const generateError = (error) =>
-    toast.error(error, {
-      position: "bottom-right",
-    });
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const { data } = await axios.post(
-        `${backend_url}/register`,
-        values,
-        { withCredentials: true }
-      );
-      if (data.errors) {
-        const { email, password, username } = data.errors;
-        if (email) generateError(email);
-        else if (password) generateError(password);
-        else if (username) generateError(username);
-      } else {
-        navigate("/");
-      }
-    } catch (ex) {
-      console.error(ex);
-    }
+  const onInputChange = (e) => {
+    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
+  const submit = async (e) => {
+    e.preventDefault();
+    await axios
+      .post("http://localhost:3002/api/users/register", userDetails)
+      .then((response) => {
+        if (response.data.success) {
+          setMessage(response.data.message);
+          navigate("/");
+        } else {
+          setMessage(response.data.message);
+        }
+      })
+      .catch((error) => {
+        const errorMessage = error.response
+          ? error.response.data.message
+          : "Network error";
+        setMessage(errorMessage);
+      });
   };
 
   return (
-    <div className="container mx-auto h-screen flex justify-center items-center">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl mb-6 text-center">Register Account</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
-              Username
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:border dark:border-gray-700">
+        <h1 className="mb-6 text-2xl font-semibold text-center text-gray-900 dark:text-white">
+          Create Account
+        </h1>
+        {message && (
+          <div className="mb-4 text-center text-red-500">{message}</div>
+        )}
+        <form className="space-y-6" onSubmit={submit}>
+          <div>
+            <label
+              htmlFor="firstName"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              First Name
             </label>
             <input
               type="text"
-              name="username"
-              id="username"
-              placeholder="Username"
-              autoComplete="username"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={handleChange}
+              name="firstName"
+              id="firstName"
+              value={userDetails.firstName}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-              Email
+          <div>
+            <label
+              htmlFor="lastName"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              value={userDetails.lastName}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Your email
             </label>
             <input
               type="email"
               name="email"
               id="email"
-              placeholder="Email"
-              autoComplete="email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={handleChange}
+              value={userDetails.email}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
+              placeholder="name@company.com"
               required
             />
           </div>
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Password
             </label>
             <input
               type="password"
               name="password"
               id="password"
-              placeholder="Password"
-              autoComplete="new-password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={handleChange}
+              value={userDetails.password}
+              onChange={onInputChange}
+              className="w-full p-3 text-gray-900 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-400 dark:focus:border-orange-400"
+              placeholder="••••••••"
               required
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full px-5 py-2.5 text-sm font-medium text-white bg-orange-400 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
-            Submit
+            Sign Up
           </button>
-          <span className="block text-center mt-4">
+          <p className="text-sm text-center text-gray-600 dark:text-gray-300">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-500 hover:underline">
-              Login
+            <Link
+              to="/login"
+              className="font-medium text-orange-400 hover:underline dark:text-orange-400"
+            >
+              Sign in
             </Link>
-          </span>
+          </p>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 }
 
-export default Register;
+export default UserRegister;
