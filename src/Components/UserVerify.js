@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { backend_url } from "../config";
 
 function UserVerify() {
   const params = useParams();
@@ -9,7 +10,7 @@ function UserVerify() {
   useEffect(() => {
     const verifyUser = async () => {
       await axios
-        .get(`http://localhost:3002/api/users/${params.id}/verify/${params.token}`)
+        .get(`${backend_url}/api/users/${params.id}/verify/${params.token}`)
         .then((response) => {
           setMessage(response.data.message);
         })

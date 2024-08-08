@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import logo from '../assets/logo.png';
 import user_logo from '../assets/user.png';
+import {backend_url} from '../config';
 
 const Navbar = () => {
   const cartItems = useSelector((store) => store.cart.products);
@@ -17,7 +18,7 @@ const Navbar = () => {
   useEffect(() => {
     const checkUserAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:3002/api/users/auth_user", { withCredentials: true });
+        const response = await axios.get(`${backend_url}/api/users/auth_user`, { withCredentials: true });
         if (response.data.authUser) {
           setIsUserLoggedIn(true);
           setUserData(response.data.user_id);
@@ -46,7 +47,7 @@ const Navbar = () => {
   }, [menuRef]);
 
   const logOut = () => {
-    axios.get("http://localhost:3002/api/users/logout", { withCredentials: true }).then(() => {
+    axios.get(`${backend_url}/api/users/logout`, { withCredentials: true }).then(() => {
       setIsUserLoggedIn(false);
       setUserData(null);
       navigate('/');

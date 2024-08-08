@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { backend_url } from "../config";
 
 const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ const PrivateRoute = ({ children }) => {
     useEffect(() => {
       const checkAuth = async () => {
         try {
-          const response = await axios.get("http://localhost:3002/api/users/auth_user", { withCredentials: true });
+          const response = await axios.get(`${backend_url}/api/users/auth_user`, { withCredentials: true });
           setIsUserLoggedIn(response.data.authUser);
           if (!response.data.authUser) {
             navigate('/login');

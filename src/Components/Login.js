@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {backend_url} from "../config";
 
 function UserLogin() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function UserLogin() {
     e.preventDefault();
 
     await axios
-      .post("http://localhost:3002/api/users/login", loginData)
+      .post(`${backend_url}/api/users/login`, loginData)
       .then((response) => {
         if (response.data.success) {
           window.location.href = "/";

@@ -8,6 +8,7 @@ import offline_img from "../assets/offline.png";
 import { restaurantList } from '../config';
 import axios from 'axios';
 import heroImg from '../assets/hero.png';
+import {backend_url} from '../config';
 
 const Home = () => {
   const [searchText, setSearchText] = useState('');
@@ -22,7 +23,7 @@ const Home = () => {
 
   const authUser = async () => {
     await axios
-      .get("http://localhost:3002/api/users/auth_user")
+      .get(`${backend_url}/api/users/auth_user`)
       .then((response) => {
         if (response.data.authUser) {
           setUser(response.data.user_id);
@@ -38,7 +39,7 @@ const Home = () => {
 
   const refresh = async () => {
     await axios
-      .get("http://localhost:3002/api/users/refresh")
+      .get(`${backend_url}/api/users/refresh`)
       .then((response) => {
         if (response.data.refresh) {
           setUser(response.data.user_id);

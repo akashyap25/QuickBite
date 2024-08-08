@@ -1,12 +1,13 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
-import axios from 'axios'; // Import axios for making HTTP requests
+import axios from 'axios'; 
+import {backend_url} from '../config';
 
 const CheckoutForm = () => {
   const handleToken = async (totalAmount, token) => {
     try {
       // Make HTTP request to your backend server to process payment
-      await axios.post('http://localhost:3002/api/stripe/pay', {
+      await axios.post(`${backend_url}/api/stripe/pay`, {
         token: token.id,
         amount: totalAmount
       });

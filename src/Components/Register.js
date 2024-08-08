@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {backend_url} from '../config';
 
 function UserRegister() {
   const [message, setMessage] = useState("");
@@ -19,7 +20,7 @@ function UserRegister() {
   const submit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:3002/api/users/register", userDetails)
+      .post(`${backend_url}/api/users/register`, userDetails)
       .then((response) => {
         if (response.data.success) {
           setMessage(response.data.message);
