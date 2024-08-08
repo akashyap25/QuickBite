@@ -6,6 +6,7 @@ import {backend_url} from '../config';
 function UserRegister() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
   const [userDetails, setUserDetails] = useState({
     firstName: "",
     lastName: "",

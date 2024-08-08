@@ -6,6 +6,8 @@ import { backend_url } from "../config";
 function UserVerify() {
   const params = useParams();
   const [message, setMessage] = useState("");
+  axios.defaults.withCredentials = true;
+
 
   useEffect(() => {
     const verifyUser = async () => {

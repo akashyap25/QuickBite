@@ -4,6 +4,8 @@ import axios from 'axios';
 import {backend_url} from '../config';
 
 const CheckoutForm = () => {
+  axios.defaults.withCredentials = true;
+
   const handleToken = async (totalAmount, token) => {
     try {
       // Make HTTP request to your backend server to process payment

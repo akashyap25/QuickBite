@@ -7,6 +7,8 @@ const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     var child = null;
+    axios.defaults.withCredentials = true;
+
   
     useEffect(() => {
       const checkAuth = async () => {

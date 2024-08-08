@@ -14,6 +14,8 @@ const Navbar = () => {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const menuRef = useRef(null);
+  axios.defaults.withCredentials = true;
+
 
   useEffect(() => {
     const checkUserAuth = async () => {
